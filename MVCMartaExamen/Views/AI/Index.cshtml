@@ -1,0 +1,20 @@
+﻿﻿<h2>Preguntar a la IA sobre conciertos</h2>
+
+<form method="post">
+    <input type="text"
+           name="question"
+           class="form-control"
+           placeholder="Ej: ¿Quién es Metallica?" />
+
+    <button class="btn btn-primary mt-2">
+        Preguntar
+    </button>
+</form>
+
+<hr />
+
+@if (ViewData["answer"] != null)
+{
+    <h4>Respuesta:</h4>
+    <p>@ViewData["answer"]</p>
+}
