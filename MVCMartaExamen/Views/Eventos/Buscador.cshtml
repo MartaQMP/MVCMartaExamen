@@ -1,0 +1,106 @@
+﻿@model List<Evento>
+
+@{
+    List<Categoria> categorias = ViewData["CATEGORIAS"] as List<Categoria>;
+    int? idSeleccionado = ViewData["ID_SELECCIONADO"] as int?;
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm bg-light p-4 rounded-4">
+                <div class="card-body">
+                    <h3 class="fw-bold text-dark mb-3 text-center text-lg-start">
+                        🔍 Encuentra tu Estilo Musical
+                    </h3>
+                    <p class="text-muted mb-4">Selecciona el género que más te guste para filtrar los conciertos en directo.</p>
+
+                    <form asp-action="Buscador" asp-controller="Eventos" method="post" class="row g-3">
+                        <div class="col-md-9">
+                            <select name="idCategoria" class="form-select form-select-lg border-0 shadow-sm px-4" required>
+                                <option value="" disabled selected>-- Selecciona un género musical --</option>
+                                @foreach (var cat in categorias)
+                                {
+                                    <option value="@cat.IdCategoria" selected="@(idSeleccionado == cat.IdCategoria ? "selected" : null)">
+                                        🎵 @cat.Nombre
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm rounded-3">
+                                Buscar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (idSeleccionado != null)
+    {
+        <div class="mb-4 text-center">
+            <h4 class="text-secondary fw-light">
+                Resultados para la categoría seleccionada: <span class="fw-bold text-primary">ID @idSeleccionado</span>
+            </h4>
+            <hr class="w-25 mx-auto text-primary" style="height: 3px;">
+        </div>
+    }
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @if (Model != null)
+        {
+            if (Model.Count > 0)
+            {
+                @foreach (var ev in Model)
+                {
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border-0 transition-card">
+                            <div class="position-relative">
+                                <img src="@(ViewBag.UrlBucket)@ev.Imagen" class="card-img-top" alt="@ev.Nombre"
+                                     style="height: 220px; object-fit: cover;">
+                            </div>
+                            <div class="card-body p-4 d-flex flex-column">
+                                <h5 class="card-title fw-bold text-dark">@ev.Nombre</h5>
+                                <p class="card-text text-secondary mt-2 mb-4">
+                                    <i class="bi bi-person-circle text-primary me-2"></i><strong>Artista:</strong> @ev.Artista
+                                </p>
+                                <button class="btn btn-dark w-100 mt-auto rounded-3">Comprar Entradas</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center py-4">
+                    <div class="alert alert-warning border-0 shadow-sm p-4 rounded-3">
+                        <p class="mb-0 fw-bold text-warning-dark">📍 Vaya, no se han encontrado conciertos disponibles para esta categoría en concreto.</p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <p class="text-muted fs-5 italic">Usa el desplegable de arriba para empezar la búsqueda.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .transition-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .transition-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+        }
+
+    .text-warning-dark {
+        color: #664d03;
+    }
+</style>
