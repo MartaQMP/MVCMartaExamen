@@ -7,6 +7,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<ServiceApiGateway>();
 builder.Services.AddHttpClient<ServiceIA>();
 builder.Services.AddScoped<ServiceIA>();
+builder.Services.AddHttpClient<ServiceMayusculas>();
+builder.Services.AddScoped<ServiceMayusculas>();
 
 var app = builder.Build();
 
